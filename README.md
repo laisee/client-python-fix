@@ -1,5 +1,15 @@
 [![Build](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml)
 [![Ruff](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml)
+<a href="https://www.python.org/downloads/release/python-3090/">
+  <img src="https://img.shields.io/badge/Python-3.09-blue.svg" alt="Python 3.09">
+</a>
+<a href="https://www.python.org/downloads/release/python-3110/">
+  <img src="https://img.shields.io/badge/Python-3.11-blue.svg" alt="Python 3.11">
+</a>
+<a href="https://www.python.org/downloads/release/python-3120/">
+  <img src="https://img.shields.io/badge/Python-3.12-blue.svg" alt="Python 3.12">
+</a>
+
 
 # Power.Trade Fix Client (Python)
 
