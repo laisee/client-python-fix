@@ -1,8 +1,6 @@
 import asyncio
-from messages import checkMsg, getMsgCancel, getMsgRFQ, getMsgNewOrder, getMsgLOGON
-import datetime
+from messages import checkMsg, getMsgCancel, getMsgNewOrder, getMsgLOGON
 from dotenv import load_dotenv
-import jwt
 import logging
 from random import randint
 import re
