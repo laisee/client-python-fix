@@ -1,11 +1,11 @@
 [![Build](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml)
 [![Ruff](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml)
 
-# Power.Trade Fix client.py
+# Power.Trade Fix Client (Python)
 
 This project provides a client implementation for interacting with a FIX protocol-based API over a secure WebSocket connection. 
 
-The client is capable of logging in, sending orders, and receiving responses from the server.
+The client is capable of logging in, sending orders and receiving responses from the server. Orders created can be cancelled.
 
 ## Features
 
