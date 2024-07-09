@@ -3,8 +3,8 @@
 <a href="https://www.python.org/downloads/release/python-3070/">
   <img src="https://img.shields.io/badge/Python-3.07-blue.svg" alt="Python 3.07">
 </a>
-<a href="https://www.python.org/downloads/release/python-3090/">
-  <img src="https://img.shields.io/badge/Python-3.09-blue.svg" alt="Python 3.09">
+<a href="https://www.python.org/downloads/release/python-3100/">
+  <img src="https://img.shields.io/badge/Python-3.10-blue.svg" alt="Python 3.10">
 </a>
 <a href="https://www.python.org/downloads/release/python-3110/">
   <img src="https://img.shields.io/badge/Python-3.11-blue.svg" alt="Python 3.11">
