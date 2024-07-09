@@ -12,7 +12,10 @@ Cargo.lock
 
 # app log files
 **/app.log
+<<<<<<< HEAD
 **/client.log
+=======
+>>>>>>> 7711f68 (merge resolutions)
 
 # ignore opython cache folder
 __pycache__/
