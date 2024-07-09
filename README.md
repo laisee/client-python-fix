@@ -1,4 +1,6 @@
-# Client.py
+[![CI](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml)
+
+# Power.Trade Fix client.py
 
 This project provides a client implementation for interacting with a FIX protocol-based API over a secure WebSocket connection. 
 
