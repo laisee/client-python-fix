@@ -24,18 +24,18 @@ The client is capable of logging in, sending orders, and receiving responses fro
 
 ## TODO
 
-- Implement logging
-- Lint the code
-- Perform security checks
-- Refactor socket/connection code
+- ~~Implement logging~~
+- ~~Lint the code~~
+- ~~Perform security checks~~
 - Handle loading environments (dev, test, prod) using command line args and multiple .env files
+- Add sample code for cancelling orders, sending multi-leg orders, listening for and processing RFQs
 
 ## Installation
 
 1. **Clone the repository:**
    ```sh
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/laisee/client-python-fix.git
+   cd 'client-python-fix'
 
 2. **Install required python libraries:**
    ```sh
@@ -43,4 +43,4 @@ The client is capable of logging in, sending orders, and receiving responses fro
 
 3. **Execute the client**
 
-   Will logon to server, add new order and await response(s) for new order confirmation 
+   Process logon to server, add new order and await response(s) for order confirmation 
