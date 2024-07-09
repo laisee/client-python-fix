@@ -27,8 +27,9 @@ The client is capable of logging in, sending orders, and receiving responses fro
 - ~~Implement logging~~
 - ~~Lint the code~~
 - ~~Perform security checks~~
-- Handle loading environments (dev, test, prod) using command line args and multiple .env files
+- Handle switching environments (test, prod) using command line args and multiple .env files
 - Add sample code for cancelling orders, sending multi-leg orders, listening for and processing RFQs
+- Generate reqular heartbeat signal messages to server side
 
 ## Installation
 
