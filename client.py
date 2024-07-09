@@ -3,8 +3,6 @@ from messages import checkMsg, getMsgCancel, getMsgNewOrder, getMsgLOGON
 from dotenv import load_dotenv
 import logging
 from random import randint
-import re
-from random import randint
 import socket
 import ssl
 import sys
@@ -138,7 +136,6 @@ async def main(server: str, port: int, apikey: str):
     #
     RESP_SENDER = "PT-OE"
     SYMBOL: str = "SOL-USD"
-    SYMBOL2: str = "AVAX-USD"
     PRICE: float = 190.00 + randint(1,8) 
     QUANTITY: float = 1.08
 
@@ -182,9 +179,9 @@ async def main(server: str, port: int, apikey: str):
 
             valid = checkMsg(response, RESP_SENDER, apikey)
             if valid: 
-               logger.info(f"Received valid LOGON response") 
+               logger.info("Received valid LOGON response") 
             else:
-               logger.error(f"Invalid LOGON response, closing down client ")
+               logger.error("Invalid LOGON response, closing down client ")
                sys.exit(1)
 
             clOrdID, msg = getMsgNewOrder(SYMBOL, PRICE, QUANTITY, apikey, seqnum)
@@ -197,7 +194,7 @@ async def main(server: str, port: int, apikey: str):
 
             logger.debug(f"Received(decoded): {response.decode('utf-8')}")
             valid = checkMsg(response, RESP_SENDER, apikey)
-            print(f"Received valid LOGON response") if valid else print("Received invalid LOGON response -> {response}")
+            print("Received valid LOGON response") if valid else print("Received invalid LOGON response -> {response}")
 
             logger.debug("Sending New Order message")
             clOrdID, msg = getMsgNewOrder(SYMBOL, PRICE, QUANTITY, apikey)
@@ -235,7 +232,7 @@ async def main(server: str, port: int, apikey: str):
                 count += 1
 
             # setup cancel order to remove new order added above
-            cancelOrderID = clOrdID;
+            cancelOrderID = clOrdID
 
             print("SLEEP 10 secs before starting to Cancel orders")
             logger.info("SLEEP before starting to Cancel orders")
@@ -253,7 +250,7 @@ async def main(server: str, port: int, apikey: str):
             # Await response from order cancel message
             #
             count = 0
-            WAIT = True;
+            WAIT = True
             while WAIT and count < LIMIT:
                 time.sleep(SLEEP)
                 logger.debug("Awaiting Cancel order response from server ...")
