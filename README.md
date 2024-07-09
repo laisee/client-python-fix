@@ -1,8 +1,5 @@
 [![Build](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml)
 [![Ruff](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml)
-<a href="https://www.python.org/downloads/release/python-3070/">
-  <img src="https://img.shields.io/badge/Python-3.07-blue.svg" alt="Python 3.07">
-</a>
 <a href="https://www.python.org/downloads/release/python-3100/">
   <img src="https://img.shields.io/badge/Python-3.10-blue.svg" alt="Python 3.10">
 </a>
