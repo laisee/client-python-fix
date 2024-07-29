@@ -27,7 +27,7 @@ def checkMsg(msg: bytes, sender: str, target: str):
     return True if count == 2 else False
 
 
-def getMsgLOGON(apikey: str):
+def getMsgLogon(apikey: str):
 
     msg = sfx.FixMessage()
     now = int(time.time())
@@ -128,8 +128,83 @@ def getMsgCancel(orderID: str, cancelOrderID:int, symbol: str, apikey: str, seqn
     # Body
     msg.append_pair(11,  cancelOrderID)          # <field name='ClOrdID' required='Y' />
     msg.append_pair(41,  orderID)                # <field name='OrigClOrdID' required='Y' />
-    msg.append_pair(54,  side)                      # <field name='Side' required='Y' />
+    msg.append_pair(54,  side)                   # <field name='Side' required='Y' />
     msg.append_pair(55,  symbol)                 # <component name='Instrument' required='Y' />
     msg.append_pair(60,  format_epoch_time(now)) # <field name='TransactTime' required='Y' />
 
     return now, msg.encode()
+
+def translateFix(key, value):
+    trans=value
+    if key == "35":
+        if value == "0":
+            trans = "Heartbeat"
+        elif value == "1":
+            trans = "Test Request"
+        elif value == "2":
+            trans = "Resend Request"
+        elif value == "3":
+            trans = "Reject"
+        elif value == "4":
+            trans = "Sequence Reset"
+        elif value == "5":
+            trans = "Logout"
+        elif value == "A":
+            trans = "Logon"
+        elif value == "6":
+            trans = "Indication of Interest"
+        elif value == "7":
+            trans = "Advertisement"
+        elif value == "8":
+            trans = "Execution Report"
+        elif value == "9":
+            trans = "Order Cancel Reject"
+        elif value == "D":
+            trans = "New Order - Single"
+        elif value == "E":
+            trans = "New Order - List"
+        elif value == "F":
+            trans = "Order Cancel Request"
+        else:
+            trans = f"UNKNOWN Fix key: {value} for Fix Id 35(message type)"
+             
+    elif key == "39":
+        if value == "0":
+            trans = "New"
+        elif value == "1":
+            trans = "Partial Fill"
+        elif value == "2":
+            trans = "Filled"
+        elif value == "3":
+            trans = "Done for Day"
+        elif value == "4":
+            trans = "Cancelled"
+        elif value == "5":
+            trans = "Replaced"
+        elif value == "6":
+            trans = "Pending Cancel"
+        elif value == "7":
+            trans = "Stopped"
+        elif value == "8":
+            trans = "Rejected"
+        elif value == "9":
+            trans = "Suspended"
+        elif value == "A":
+            trans = "Pending New"
+        elif value == "A":
+            trans = "Pending New"
+        elif value == "B":
+            trans = "Calculated"
+        elif value == "C":
+            trans = "Expired"
+        elif value == "D":
+            trans = "Accepted for Bidding"
+        elif value == "E":
+            trans = "Pending Replace"
+        else:
+            trans = f"UNKNOWN Fix key: {value} for Fix Id 39(message status)"
+             
+    else:
+        trans = f"UNKNOWN Fix field passed to translate() method {key} for translation"
+
+    return trans

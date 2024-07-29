@@ -13,8 +13,7 @@ Cargo.lock
 # app log files
 app.log
 **/app.log
-**/client.log
-client.log
+**.pyclient.log
 
 # ignore opython cache folder
 __pycache__/
