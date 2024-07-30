@@ -12,6 +12,7 @@ Cargo.lock
 
 # app log files
 app.log
+**/log
 **/app.log
 **.pyclient.log
 

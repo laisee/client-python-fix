@@ -1,5 +1,5 @@
 import asyncio
-from messages import checkMsg, getMsgCancel, getMsgNewOrder, getMsgLogon, translateFix
+from messages import checkMsg, getMsgHeartbeat, getMsgCancel, getMsgNewOrder, getMsgLogon, translateFix
 from dotenv import load_dotenv
 import logging
 from random import randint
@@ -7,6 +7,7 @@ import socket
 import ssl
 import sys
 import time
+import threading
 import os
 
 # Common settings
@@ -29,6 +30,34 @@ file_handler.setFormatter(formatter)
 
 # Add the handler to the logger
 logger.addHandler(file_handler)
+
+# first seqnum taken by LOGON message, this var will be incremented for new orders, heartbeat
+seqnum = 2
+
+# Event object to signal the heartbeat thread to stop
+stop_event = threading.Event()
+
+def send_heartbeat(apikey, conn):
+    global seqnum
+    seqnum += 1
+    try:
+        msg = getMsgHeartbeat(apikey, seqnum)
+        conn.sendall(msg)
+        logger.info(f"Sending Heartbeat Msg: {msg}")
+        logger.info(f"Sent heartbeat message with Success @ seqnum {seqnum}")
+    except Exception as e:
+        logger.error(f"Failed to send Heartbeat message: error was '{e}'")
+
+def heartbeat_thread(apikey, conn, stop_event):
+    try:
+        time.sleep(20)
+        while not stop_event.is_set():
+            # delay start of thread by 20 secs
+            HEARTBEAT_SLEEP=int(os.getenv('HEARTBEAT_SLEEP', 90)) # defaults to 90 secs
+            send_heartbeat(apikey, conn)
+            time.sleep(HEARTBEAT_SLEEP)  # Send heartbeat every `HEARTBEAT_SLEEP` seconds
+    except Exception as e:
+        print(f"Heartbeat thread exception: {e}")
 
 def get_attr(fix_message, key):
     """
@@ -60,6 +89,8 @@ def get_attrs(fix_message):
     return attributes
 
 async def main(server: str, port: int, apikey: str):
+    global seqnum
+
     #
     # Trade test values
     # N.B. Do NOT use in PRODUCTION
@@ -69,7 +100,7 @@ async def main(server: str, port: int, apikey: str):
     PRICE: float = 190.00 + randint(1,8) 
     QUANTITY: float = 1.08
 
-    seqnum = 2
+
     # Define the server address and port
     server_addr = f"{server}:{port}"
     logger.info(f"server: {server_addr}")
@@ -101,16 +132,22 @@ async def main(server: str, port: int, apikey: str):
         #  Check Fix API connection with Logon message
         msg = getMsgLogon(apikey)
         try:
+            print(f"Sending Logon request to server {server} ...")
             logger.debug(f"Sending Logon request to server {server} ...")
             # send Fix Logon message 
             conn.sendall(msg)
         
+            print(f"Reading Logon response from server {server} ...")
             logger.debug(f"Reading Logon response from server {server} ...")
             response = conn.recv(1024)
 
+            print(f"Checking Logon response from server {response} ...")
             valid = checkMsg(response, RESP_SENDER, apikey)
             if valid: 
-               logger.info("Received valid Logon response") 
+                logger.info("Received valid Logon response") 
+
+                # Start the heartbeat thread
+                threading.Thread(target=heartbeat_thread, args=(apikey, conn, stop_event,)).start()
             else:
                logger.error("Invalid Logon response, closing down client ")
                sys.exit(1)
@@ -213,6 +250,7 @@ async def main(server: str, port: int, apikey: str):
         # 
         FINAL_SLEEP=int(os.getenv("FINAL_SLEEP", 20))
         logger.info(f"\nWaiting {FINAL_SLEEP} secs to close connection")
+        stop_event.set()  # Signal the heartbeat thread to stop
         time.sleep(FINAL_SLEEP)
         sock.close()
         conn.close()

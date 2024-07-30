@@ -7,7 +7,6 @@ SEPARATOR = '\x01'
 VERTLINE='|'
 
 def checkMsg(msg: bytes, sender: str, target: str):
-
     count = 0
     assert msg is not None, "error - message cannot be None or empty string"
 
@@ -26,6 +25,23 @@ def checkMsg(msg: bytes, sender: str, target: str):
     # require both to be present in message
     return True if count == 2 else False
 
+def getMsgHeartbeat(apikey: str, seqnum: int):
+    
+    msg = sfx.FixMessage()
+    now = int(time.time())
+
+    assert apikey is not None, "Error - API KEY must not be empty or None"
+    assert seqnum > 2, "Error - Seqnum must be greater than two - logon msg uses 1,2"
+
+    # Header
+    msg.append_pair(8,  "FIX.4.4", True)
+    msg.append_pair(35, 0, True)
+    msg.append_pair(34, seqnum, True)
+    msg.append_pair(49, apikey, True)
+    msg.append_pair(52, format_epoch_time(now), True)
+    msg.append_pair(56, "PT-OE", True)
+
+    return msg.encode()
 
 def getMsgLogon(apikey: str):
 
