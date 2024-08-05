@@ -20,15 +20,15 @@
 
 # Power.Trade Fix Client (Python)
 
-This project provides a client implementation for interacting with a FIX protocol-based API over a secure WebSocket connection. 
+This project provides a client implementation for interacting with a FIX protocol-based API over a secure connection. 
 
-The client is capable of logging in, sending orders and receiving responses from the server. Orders created can be cancelled.
+The client is capable of connecting to PT fix server, submitting new order(s), cancelling orders and handling responses (e.g. heartbeat) from the server. A heartbeat message can be sent every XX seconds where XX can be configure.
 
 ## Features
 
 - **JWT Generation:** Generates JSON Web Tokens (JWT) for authenticating requests.
 - **FIX Message Handling:** Constructs and sends FIX messages to the server.
-- **WebSocket Communication:** Establishes a secure WebSocket connection to send and receive messages.
+- **Secure Communication:** Establishes a secure WebSocket connection to send and receive messages.
 - **Message Validation:** Validates the presence of necessary fields in messages.
 - **Environment Configuration:** Uses environment variables loaded from a .env file for configuration.
 
@@ -44,12 +44,14 @@ The client is capable of logging in, sending orders and receiving responses from
 
 ## TODO
 
-- ~~Implement logging~~
-- ~~Lint the code~~
+- ~~Implement logging with configurable names including yymmddhhss~~
+- ~~Lint the code using common tools e.g. black, ruff, isort~~
 - ~~Perform security checks~~
+- ~~Generate reqular heartbeat signal messages to server side~~
+- ~~Add sample code for sending & cancelling Single Leg orders~~
+- Add sample code for sending & cancelling multi-leg orders
+- Add sample code for listening to and processing RFQs
 - Handle switching environments (test, prod) using command line args and multiple .env files
-- Add sample code for cancelling orders, sending multi-leg orders, listening for and processing RFQs
-- Generate reqular heartbeat signal messages to server side
 
 ## Installation
 
@@ -62,6 +64,23 @@ The client is capable of logging in, sending orders and receiving responses from
    ```sh
    pip install -r requirements.txt 
 
-3. **Execute the client**
+3. **Generate API Keys**
+   This is done at Power Trade UI under URL 'https://app.power.trade/api-keys'
+   N.B. make sure to select "Fix API" as the API key Type and select "Order Entry/Cancel on Disconnect" if orders should be automatically cancelled when Fix session is closed or network disconnect happens.
 
-   Process logon to server, add new order and await response(s) for order confirmation 
+![image](https://github.com/user-attachments/assets/b700afb6-24ad-4bf6-b28d-fc99380372a3)
+  
+4. **Configure the runtime environment using .env file**
+   ```sh
+   touch .env
+   ```
+   open .env file with nano or vi editors
+   update settings for API Key and other values
+ 
+6. **Execute the client**
+
+   Execute sample client with Python at command line:
+   ```sh
+   python client.py
+   ```
+   Review client actions as it executes logon to server, adds a new order, cancels the order while awaiting response(s). A sleep action allows time to review new order on system via API or UI before it's cancelled. 
