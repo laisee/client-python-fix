@@ -8,23 +8,29 @@ from utils import format_epoch_time, generateJWT
 SEPARATOR = "\x01"
 VERTLINE = "|"
 
+
 def checkLogonMsg(msg: bytes):
     status = None
     error_msg = ""
     assert msg is not None, "error - message cannot be None or empty string"
     fields = msg.decode("utf-8").replace(SEPARATOR, VERTLINE).split(VERTLINE)
 
-    # check message type is 'Logon' -> Fix Tag MsgType(35) == 'A', not Logout -> '5' 
+    # check message type is 'Logon' -> Fix Tag MsgType(35) == 'A', not Logout -> '5'
     for field in fields:
         if field and len(field) > 0:
             key, value = field.strip().split("=")
-            if str(key) == '35' and str(value) == '5':   # received a LOGOUT response message - FAILURE
+            if (
+                str(key) == "35" and str(value) == "5"
+            ):  # received a LOGOUT response message - FAILURE
                 status = False
-            elif str(key) == '35' and str(value) == 'A': # received a LOGON response message - SUCCESS 
+            elif (
+                str(key) == "35" and str(value) == "A"
+            ):  # received a LOGON response message - SUCCESS
                 status = True
-            elif str(key) == '58':
-                error_msg = value 
+            elif str(key) == "58":
+                error_msg = value
     return status, error_msg
+
 
 def checkMsg(msg: bytes, sender: str, target: str):
     count = 0
