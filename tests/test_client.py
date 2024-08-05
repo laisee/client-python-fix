@@ -1,7 +1,6 @@
 from unittest import TestCase
 
-from messages import (checkMsg, getMsgCancel, getMsgLogon, getMsgNewOrder,
-                      getMsgRFQ)
+from messages import checkMsg, getMsgCancel, getMsgLogon, getMsgNewOrder, getMsgRFQ
 
 
 class DummyTest(TestCase):

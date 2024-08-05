@@ -10,9 +10,15 @@ from random import randint
 
 from dotenv import load_dotenv
 
-from messages import (checkMsg, getMsgCancel, getMsgHeartbeat, getMsgLogon,
-                      getMsgNewOrder, translateFix)
-from utils import get_attr, get_attrs, get_log_filename
+from messages import (
+    checkMsg,
+    getMsgCancel,
+    getMsgHeartbeat,
+    getMsgLogon,
+    getMsgNewOrder,
+    translateFix,
+)
+from utils import get_attr, get_log_filename
 
 # Common settings
 SEPARATOR = "\x01"
@@ -75,37 +81,6 @@ def heartbeat_thread(apikey, conn, stop_event):
             )  # Send heartbeat every `HEARTBEAT_SLEEP` seconds
     except Exception as e:
         print(f"Heartbeat thread exception: {e}")
-
-
-def get_attr(fix_message, key):
-    """
-    Extracts the value for a given key from a FIX message.
-
-    :param fix_message: The FIX message string.
-    :param key: The key for which to get the value.
-    :return: The value associated with the key, or None if the key is not found.
-    """
-    return get_attrs(fix_message).get(key)
-
-
-def get_attrs(fix_message):
-    """
-    Parses a FIX message with '|' as the separator into a dictionary of attributes.
-
-    :param fix_message: The FIX message string.
-    :return: A dictionary with attribute tags as keys and their values as values.
-    """
-    attributes = {}
-
-    # Split the message by '|'
-    parts = fix_message.strip().split("|")
-
-    for part in parts:
-        if "=" in part:
-            key, value = part.split("=", 1)
-            attributes[key] = value
-
-    return attributes
 
 
 async def main(server: str, port: int, apikey: str):
@@ -328,7 +303,7 @@ async def main(server: str, port: int, apikey: str):
                 count += 1
         except socket.timeout:
             wait_time = os.getenv("MSG_RESPONSE_WAIT", 5)
-            logger.info("Receive operation timed out after {wait_time} seconds.")
+            logger.info(f"Receive operation timed out after {wait_time} seconds.")
         except Exception as e:
             logger.error(f"Error while processing send/receive Fix messages: {e}")
 
