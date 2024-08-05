@@ -1,6 +1,8 @@
 from unittest import TestCase
 
-from messages import checkMsg, getMsgLogon, getMsgNewOrder, getMsgRFQ, getMsgCancel
+from messages import (checkMsg, getMsgCancel, getMsgLogon, getMsgNewOrder,
+                      getMsgRFQ)
+
 
 class DummyTest(TestCase):
     def test_checkMsg(self):
