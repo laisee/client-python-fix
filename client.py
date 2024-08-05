@@ -175,15 +175,15 @@ async def main(server: str, port: int, apikey: str):
             # iterate few times with sleep to allow trading messages from Limit Order to arrive
             #
             count = 0
-            SLEEP = os.getenv('SLEEP',  5) # seconds to sleep between iterations
-            LIMIT = os.getenv('LIMIT', 10) # iteration count
+            POLL_SLEEP = os.getenv('SLEEP',  5) # seconds to sleep between iterations
+            POLL_LIMIT = os.getenv('LIMIT', 10) # iteration count
 
             logger.info(
                 f"Waiting for New Order [{clOrdID}] confirmation response from server [{count}] ..."
             )
 
-            while count < LIMIT:
-                time.sleep(SLEEP)
+            while count < POLL_LIMIT:
+                time.sleep(POLL_SLEEP)
                 try:
                     logger.info("Waiting for new message ...")
                     response = conn.recv(1024)
