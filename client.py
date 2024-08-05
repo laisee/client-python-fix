@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 from messages import (
     checkMsg,
+    checkLogonMsg,
     getMsgCancel,
     getMsgHeartbeat,
     getMsgLogon,
@@ -70,7 +71,7 @@ def heartbeat_thread(apikey, conn, stop_event):
     try:
         INIT_SLEEP = os.getenv(
             "INIT_SLEEP", 60
-        )  # SLEEP for X seconds while client is tarting up, default to 60 seconds
+        )  # SLEEP for X seconds while client is starting up, default to 60 seconds
         time.sleep(INIT_SLEEP)
         HEARTBEAT_SLEEP = int(os.getenv("HEARTBEAT_SLEEP", 90))  # defaults to 90 secs
         while not stop_event.is_set():
@@ -103,7 +104,7 @@ async def main(server: str, port: int, apikey: str):
     # Wrap the socket with SSL
     context = ssl.create_default_context()
     context.load_verify_locations(
-        cafile=os.getenv("CERTFILE_LOCATION", "test-cert.crt")
+        cafile=os.getenv("CERTFILE_LOCATION", "cert.crt")
     )
     logger.info("Context created")
 
@@ -129,6 +130,7 @@ async def main(server: str, port: int, apikey: str):
 
         #  Check Fix API connection with Logon message
         msg = getMsgLogon(apikey)
+        error_msg = ""
         try:
             print(f"Sending Logon request to server {server} ...")
             logger.debug(f"Sending Logon request to server {server} ...")
@@ -140,11 +142,10 @@ async def main(server: str, port: int, apikey: str):
             response = conn.recv(1024)
 
             print(f"Checking Logon response from server {response} ...")
-            valid = checkMsg(response, RESP_SENDER, apikey)
+            valid, error_msg = checkLogonMsg(response)
             if valid:
                 logger.info("Received valid Logon response")
-
-                # Start the heartbeat thread
+                # Start heartbeat thread
                 threading.Thread(
                     target=heartbeat_thread,
                     args=(
@@ -154,15 +155,13 @@ async def main(server: str, port: int, apikey: str):
                     ),
                 ).start()
             else:
-                logger.error("Invalid Logon response, closing down client ")
+                print(f"Invalid Logon response: error was '{error_msg}' ")
+                logger.error(f"Invalid Logon response: error was '{error_msg}'")
                 sys.exit(1)
 
             clOrdID, msg = getMsgNewOrder(SYMBOL, PRICE, QUANTITY, apikey, seqnum)
             decoded_msg = msg.decode("utf-8")
-            logger.debug(
-                "Sending new order [%s] with order details: {%s}"
-                % (clOrdID, decoded_msg)
-            )
+            logger.debug( "Sending new order [%s] with order details: {%s}" % (clOrdID, decoded_msg))
             conn.sendall(msg)
 
             print("Reading New Order response from server ...")
@@ -170,22 +169,14 @@ async def main(server: str, port: int, apikey: str):
 
             logger.debug(f"Received(decoded): {response.decode('utf-8')}")
             valid = checkMsg(response, RESP_SENDER, apikey)
-            (
-                print("Received valid Logon response")
-                if valid
-                else print("Received invalid Logon response -> {response}")
-            )
-
-            logger.debug("Sending New Order message")
-            clOrdID, msg = getMsgNewOrder(SYMBOL, PRICE, QUANTITY, apikey)
-            logger.info(msg)
+            print("Received valid New Order response") if valid else print(f"Received invalid New Order response -> {response}")
 
             #
             # iterate few times with sleep to allow trading messages from Limit Order to arrive
             #
             count = 0
-            SLEEP = 5  # seconds to sleep between iterations. TODO - move to .env config file
-            LIMIT = 10  # iteration count, TODO - move to .env config file
+            SLEEP = os.getenv('SLEEP',  5) # seconds to sleep between iterations
+            LIMIT = os.getenv('LIMIT', 10) # iteration count
 
             logger.info(
                 f"Waiting for New Order [{clOrdID}] confirmation response from server [{count}] ..."
@@ -221,16 +212,13 @@ async def main(server: str, port: int, apikey: str):
                                 break
                 except Exception as e:
                     logger.error("Error while waiting for new message -> %s" % e)
-
-                # Sometimes multiple Fix messages received.
-                # - split on initial tag to separate msgs
                 count += 1
 
             # setup cancel order to remove new order added above
             cancelOrderID = clOrdID
 
-            print(f"SLEEP {SLEEP*5} secs before starting to Cancel orders")
-            logger.info("SLEEP before starting to Cancel orders")
+            print(f"Sleep {SLEEP*5} secs before starting to Cancel orders")
+            logger.info("Sleep before starting to Cancel orders")
             time.sleep(SLEEP * 5)
             #
             # Cancel Order can be done if the New Limit Order above is not filled
@@ -268,14 +256,14 @@ async def main(server: str, port: int, apikey: str):
                 if get_attr(msg, "35") == "0":
                     logger.info("Heartbeat msg received ...")
                 #
-                # was received message an 'execution report' [Msg Type = '8']
+                # received message an 'execution report' [Msg Type = '8']
                 #
                 elif (
                     get_attr(msg, "35") == "8"
                     and translateFix("39", get_attr(msg, "39")) == "Cancelled"
                 ):
                     logger.info(
-                        "Exit loop for order cancellation - received order status == 'Cancelled'"
+                        "Received Order Cancel response with order status == 'Cancelled'"
                     )
                     POLL = False
                 #
@@ -285,7 +273,7 @@ async def main(server: str, port: int, apikey: str):
                     and translateFix("39", get_attr(msg, "39")) == "Rejected"
                 ):
                     logger.info(
-                        "Exit loop for order cancellation - received order status == 'Rejected'"
+                        "Received Order Cancel response with order status == 'Rejected'"
                     )
                     POLL = False
                 else:
@@ -348,4 +336,10 @@ if __name__ == "__main__":
     #
     # call main method() to run logon/add/cancel or cancel on logout order functions
     #
-    asyncio.run(main(server, port, apikey))
+    try:
+        asyncio.run(main(server, port, apikey))
+    except SystemExit as e:
+        print(f"Exiting with code {e.code}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        sys.exit(1)
