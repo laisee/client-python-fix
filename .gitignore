@@ -8,6 +8,8 @@ app.log
 # ignore opython cache folder
 __pycache__/
 
+.python-version
+
 .DS_Store
 
 # .env files

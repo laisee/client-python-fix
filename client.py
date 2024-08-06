@@ -180,10 +180,10 @@ async def main(server: str, port: int, apikey: str):
             # iterate few times with sleep to allow trading messages from Limit Order to arrive
             #
             count = 0
-            POLL_SLEEP = os.getenv(
+            POLL_SLEEP = int(os.getenv(
                 "POLL_SLEEP", 5
-            )  # seconds to sleep between iterations
-            POLL_LIMIT = os.getenv("POLL_LIMIT", 10)  # iteration count
+            ))  # seconds to sleep between iterations
+            POLL_LIMIT = int(os.getenv("POLL_LIMIT", 10))  # iteration count
 
             logger.info(
                 f"Waiting for New Order [{clOrdID}] confirmation response from server [{count}] ..."
