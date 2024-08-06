@@ -77,7 +77,18 @@ The client is capable of connecting to PT fix server, submitting new order(s), c
    open .env file with nano or vi editors
    update settings for API Key and other values
  
-6. **Execute the client**
+6. **Configure a certificate for PowerTrade API endpoint"
+
+   Generate a certificate for the API endpoint by inspecting & downloading public key cert from API Url e.g. api.wss.test.power.trade
+   Copy the certificate contents to a file which is typically named as "cert.crt", but can be called anything.
+
+   The cert file name can be added to the .env file using the CERTFILE_NAME variable, see example below.
+   ```sh
+   # Cert File location
+   CERTFILE_LOCATION='cert.crt'
+   ```
+ 
+7. **Execute the client**
 
    Execute sample client with Python at command line:
    ```sh
