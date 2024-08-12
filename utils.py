@@ -25,7 +25,9 @@ def generateJWT(apikey: str, now):
         return jwt.encode(payload, API_SECRET, algorithm="ES256")
     except Exception as err:
         print("Error: {}".format(err))
-        exit(0)
+        raise ValueError(
+            f"Error '{err}' while generating JWT token with APIKEY {apikey}"
+        )
 
 
 def get_log_filename(prefix):

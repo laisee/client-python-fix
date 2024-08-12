@@ -120,6 +120,7 @@ def getMsgNewOrder(
     msg.append_pair(44, price)  # Order Price
     msg.append_pair(54, 2)  # Side (1 = BUY, 2 = SELL)
     msg.append_pair(55, symbol)  # Symbol
+    msg.append_pair(59, 1)  # TimeInForce
     msg.append_pair(60, format_epoch_time(now))  # Transaction Timestamp(now)
 
     return now, msg.encode()

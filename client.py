@@ -139,7 +139,7 @@ async def main(server: str, port: int, apikey: str):
             logger.debug(f"Reading Logon response from server {server} ...")
             response = conn.recv(1024)
 
-            print(f"Checking Logon response from server {response} ...")
+            logger.debug(f"Checking Logon response from server {response} ...")
             valid, error_msg = checkLogonMsg(response)
             if valid:
                 logger.info("Received valid Logon response")
@@ -153,12 +153,15 @@ async def main(server: str, port: int, apikey: str):
                     ),
                 ).start()
             else:
-                print(f"Invalid Logon response: error was '{error_msg}' ")
                 logger.error(f"Invalid Logon response: error was '{error_msg}'")
                 sys.exit(1)
 
             clOrdID, msg = getMsgNewOrder(SYMBOL, PRICE, QUANTITY, apikey, seqnum)
             decoded_msg = msg.decode("utf-8")
+            print(
+                "Sending new order [%s] with order details: {%s}"
+                % (clOrdID, decoded_msg)
+            )
             logger.debug(
                 "Sending new order [%s] with order details: {%s}"
                 % (clOrdID, decoded_msg)
@@ -180,9 +183,9 @@ async def main(server: str, port: int, apikey: str):
             # iterate few times with sleep to allow trading messages from Limit Order to arrive
             #
             count = 0
-            POLL_SLEEP = int(os.getenv(
-                "POLL_SLEEP", 5
-            ))  # seconds to sleep between iterations
+            POLL_SLEEP = int(
+                os.getenv("POLL_SLEEP", 5)
+            )  # seconds to sleep between iterations
             POLL_LIMIT = int(os.getenv("POLL_LIMIT", 10))  # iteration count
 
             logger.info(
