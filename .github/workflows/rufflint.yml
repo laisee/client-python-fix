@@ -1,4 +1,4 @@
-name: Lint(using Ruff)
+name: Lint(Ruff)
 
 on:
   push:
