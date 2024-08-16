@@ -1,11 +1,12 @@
 [![Build](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml)
 [![Ruff](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml)
 [![Security Check](https://github.com/laisee/client-python-fix/actions/workflows/security-check.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/security-check.yml)
+
 <a href="https://www.python.org/downloads/release/python-3080/">
-  <img src="https://img.shields.io/badge/Python-3.08-blue.svg" alt="Python 3.10">
+  <img src="https://img.shields.io/badge/Python-3.08-blue.svg" alt="Python 3.08">
 </a>
 <a href="https://www.python.org/downloads/release/python-3090/">
-  <img src="https://img.shields.io/badge/Python-3.09-blue.svg" alt="Python 3.10">
+  <img src="https://img.shields.io/badge/Python-3.09-blue.svg" alt="Python 3.09">
 </a>
 <a href="https://www.python.org/downloads/release/python-3100/">
   <img src="https://img.shields.io/badge/Python-3.10-blue.svg" alt="Python 3.10">
