@@ -1,4 +1,4 @@
-name: Security Check(Bandit)
+name: Security(Bandit)
 
 on:
   push:
