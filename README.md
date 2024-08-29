@@ -23,7 +23,11 @@
 
 This project provides a client implementation for interacting with a FIX protocol-based API over a secure connection. 
 
-The client is capable of connecting to PT fix server, submitting new order(s), cancelling orders and handling responses (e.g. heartbeat) from the server. A heartbeat message can be sent every XX seconds where XX can be configure.
+The client is capable of:
+ - Connecting to Power Trade Fix server
+ - Submitting new order(s)
+ - Cancelling orders
+ - Handling responses (e.g. heartbeat) from the server. A heartbeat message can be sent every XX seconds where XX can be configured
 
 ## Features
 
@@ -81,6 +85,7 @@ The client is capable of connecting to PT fix server, submitting new order(s), c
 6. **Configure a certificate for PowerTrade API endpoint"
 
    Generate a certificate for the API endpoint by inspecting & downloading public key cert from API Url e.g. api.wss.test.power.trade
+
    Copy the certificate contents to a file which is typically named as "cert.crt", but can be called anything.
 
    The cert file name can be added to the .env file using the CERTFILE_NAME variable, see example below.
@@ -89,10 +94,12 @@ The client is capable of connecting to PT fix server, submitting new order(s), c
    CERTFILE_LOCATION='cert.crt'
    ```
  
-7. **Execute the client**
+8. **Execute the client**
 
    Execute sample client with Python at command line:
    ```sh
    python client.py
    ```
-   Review client actions as it executes logon to server, adds a new order, cancels the order while awaiting response(s). A sleep action allows time to review new order on system via API or UI before it's cancelled. 
+   Review client actions as it executes logon to server, adds a new order, cancels the order while awaiting response(s).
+
+   A sleep action allows time to review the new order on system via API or UI before it's cancelled. 
