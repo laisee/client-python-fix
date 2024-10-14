@@ -6,7 +6,6 @@ import ssl
 import sys
 import threading
 import time
-from random import randint
 
 from dotenv import load_dotenv
 
