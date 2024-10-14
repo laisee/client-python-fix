@@ -15,7 +15,9 @@ def checkLogonMsg(msg: bytes):
     assert msg is not None, "error - message cannot be None or empty string"
     fields = msg.decode("utf-8").replace(SEPARATOR, VERTLINE).split(VERTLINE)
 
+    #
     # check message type is 'Logon' -> Fix Tag MsgType(35) == 'A', not Logout -> '5'
+    #
     for field in fields:
         if field and len(field) > 0:
             key, value = field.strip().split("=")
@@ -114,13 +116,13 @@ def getMsgNewOrder(
     msg.append_pair(56, "PT-OE", True)
 
     # Body
-    msg.append_pair(11, now)  # ClOrdID
-    msg.append_pair(38, quantity)  # Order Quantity
-    msg.append_pair(40, 2)  # OrdType (1 = Market, 2 = Limit)
-    msg.append_pair(44, price)  # Order Price
-    msg.append_pair(54, 2)  # Side (1 = BUY, 2 = SELL)
-    msg.append_pair(55, symbol)  # Symbol
-    msg.append_pair(59, 1)  # TimeInForce
+    msg.append_pair(11, now)        # ClOrdID
+    msg.append_pair(38, quantity)   # Order Quantity
+    msg.append_pair(40, 1)          # OrdType (1 = Market, 2 = Limit)
+    msg.append_pair(44, price)      # Order Price
+    msg.append_pair(54, 1)          # Side (1 = BUY, 2 = SELL)
+    msg.append_pair(55, symbol)     # Symbol
+    msg.append_pair(59, 1)          # TimeInForce::GTC(GoodTillCancel)
     msg.append_pair(60, format_epoch_time(now))  # Transaction Timestamp(now)
 
     return now, msg.encode()

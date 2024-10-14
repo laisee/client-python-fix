@@ -89,20 +89,21 @@ async def main(server: str, port: int, apikey: str):
 
     #
     # Trade test values
-    # N.B. Do NOT use in PRODUCTION
+    # N.B. Not designed for PRODUCTION trading
     #
     RESP_SENDER = "PT-OE"
-    SYMBOL: str = "SOL-USD"
-    PRICE: float = 190.00 + randint(1, 8)
-    QUANTITY: float = 1.08
+    SYMBOL: str = "ETH-USD"
+    PRICE: float = 2508.08 #3090.00 + randint(1, 8)
+    QUANTITY: float = .1
 
     # Define server address w/ port
     server_addr = f"{server}:{port}"
     logger.info(f"server: {server_addr}")
 
-    # Create a context for the TLS connection
-    # Wrap the socket with SSL
+    # Create context for the TLS connection
     context = ssl.create_default_context()
+
+    # Wrap the socket with SSL
     context.load_verify_locations(cafile=os.getenv("CERTFILE_LOCATION", "cert.crt"))
     logger.info("Context created")
 
@@ -112,9 +113,7 @@ async def main(server: str, port: int, apikey: str):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     # wait up to X secs for receiving responses
-    logger.info(
-        f"Assigning WAIT for Fix response messages of {os.getenv('MSG_RESPONSE_WAIT', 5)} seconds"
-    )
+    logger.info( f"Assigning WAIT for Fix response messages of {os.getenv('MSG_RESPONSE_WAIT', 5)} seconds")
     sock.settimeout(int(os.getenv("MSG_RESPONSE_WAIT", 5)))
 
     print(f"connecting to {server} on port {port} ...")
@@ -130,8 +129,8 @@ async def main(server: str, port: int, apikey: str):
         msg = getMsgLogon(apikey)
         error_msg = ""
         try:
-            print(f"Sending Logon request to server {server} ...")
-            logger.debug(f"Sending Logon request to server {server} ...")
+            print(f"Sending Logon request {msg} to server {server} ...")
+            logger.debug(f"Sending Logon msg {msg} to server {server} ...")
             # send Fix Logon message
             conn.sendall(msg)
 
@@ -139,7 +138,7 @@ async def main(server: str, port: int, apikey: str):
             logger.debug(f"Reading Logon response from server {server} ...")
             response = conn.recv(1024)
 
-            logger.debug(f"Checking Logon response from server {response} ...")
+            print(f"Checking Logon response from server {response} ...")
             valid, error_msg = checkLogonMsg(response)
             if valid:
                 logger.info("Received valid Logon response")
@@ -225,7 +224,7 @@ async def main(server: str, port: int, apikey: str):
                 count += 1
 
             # setup cancel order to remove new order added above
-            cancelOrderID = clOrdID
+            cancelOrderID = 11111 # clOrdID
 
             print(f"Sleep {POLL_SLEEP*5} secs before starting to Cancel orders")
             logger.info("Sleep before starting to Cancel orders")
