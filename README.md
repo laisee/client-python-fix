@@ -33,7 +33,7 @@ The client is capable of:
 
 ## Prerequisites
 
-- Python 3.x
+- Python 3.10/3.11/3.12/3.13
 - Required Python packages (can be installed via `pip`):
   - `python-dotenv`
   - `pyjwt`
