@@ -17,6 +17,9 @@
 <a href="https://www.python.org/downloads/release/python-3120/">
   <img src="https://img.shields.io/badge/Python-3.12-blue.svg" alt="Python 3.12">
 </a>
+<a href="https://www.python.org/downloads/release/python-3120/">
+  <img src="https://img.shields.io/badge/Python-3.13-blue.svg" alt="Python 3.13">
+</a>
 
 
 # Power.Trade Fix Client (Python)
