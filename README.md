@@ -76,7 +76,7 @@ The client is capable of:
    open .env file with nano or vi editors
    update settings for API Key and other values
  
-6. **Configure a certificate for PowerTrade API endpoint"
+6. **Configure a certificate for PowerTrade API endpoint**
 
    Generate a certificate for the API endpoint by inspecting & downloading public key cert from API Url e.g. api.wss.test.power.trade
 
