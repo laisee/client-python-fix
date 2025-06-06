@@ -37,7 +37,7 @@ def test_get_log_filename(monkeypatch):
 
 
 def test_generate_jwt_success(monkeypatch):
-    os.environ["API_SECRET"] = "secret"
+    os.environ["API_SECRET"] = "secret" # nosec B105
     os.environ["API_URI"] = "uri"
     monkeypatch.setattr(utils.jwt, "encode", lambda p, k, algorithm=None: "TOKEN")
     assert utils.generateJWT("api", 123) == "TOKEN"
