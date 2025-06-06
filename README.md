@@ -1,6 +1,7 @@
 [![Build](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml)
 [![Ruff](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml)
 [![Security Check](https://github.com/laisee/client-python-fix/actions/workflows/security-check.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/security-check.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <a href="https://www.python.org/downloads/release/python-3110/">
   <img src="https://img.shields.io/badge/Python-3.11-blue.svg" alt="Python 3.11">
