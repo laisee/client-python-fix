@@ -3,3 +3,4 @@ simplefix==1.0.17
 websockets==11.0.3
 pytest==8.2.2
 PyJWT==2.9.0
+pytest-cov==4.1.0
