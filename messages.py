@@ -9,8 +9,9 @@ SEPARATOR = "\x01"
 VERTLINE = "|"
 
 
-def checkLogonMsg(msg: bytes):
-    status = None
+def checkLogonMsg(msg: bytes) -> tuple[bool | None, str]:
+    """Validate a FIX logon response message."""
+    status: bool | None = None
     error_msg = ""
     assert msg is not None, "error - message cannot be None or empty string"
     fields = msg.decode("utf-8").replace(SEPARATOR, VERTLINE).split(VERTLINE)
@@ -34,7 +35,8 @@ def checkLogonMsg(msg: bytes):
     return status, error_msg
 
 
-def checkMsg(msg: bytes, sender: str, target: str):
+def checkMsg(msg: bytes, sender: str, target: str) -> bool:
+    """Check a generic FIX message contains sender and target IDs."""
     count = 0
     assert msg is not None, "error - message cannot be None or empty string"
 
@@ -54,7 +56,8 @@ def checkMsg(msg: bytes, sender: str, target: str):
     return True if count == 2 else False
 
 
-def getMsgHeartbeat(apikey: str, seqnum: int):
+def getMsgHeartbeat(apikey: str, seqnum: int) -> bytes:
+    """Return a FIX heartbeat message."""
 
     msg = sfx.FixMessage()
     now = int(time.time())
@@ -73,7 +76,8 @@ def getMsgHeartbeat(apikey: str, seqnum: int):
     return msg.encode()
 
 
-def getMsgLogon(apikey: str):
+def getMsgLogon(apikey: str) -> bytes:
+    """Return a FIX logon message."""
 
     msg = sfx.FixMessage()
     now = int(time.time())
@@ -98,7 +102,8 @@ def getMsgLogon(apikey: str):
 
 def getMsgNewOrder(
     symbol: str, price: float, quantity: float, apikey: str, seqnum: int = 2
-):
+) -> tuple[int, bytes]:
+    """Return FIX message bytes for a new single order."""
 
     msg = sfx.FixMessage()
     now = int(time.time())
@@ -128,7 +133,10 @@ def getMsgNewOrder(
     return now, msg.encode()
 
 
-def getMsgRFQ(symbol: str, price: float, quantity: float, apikey: str, seqnum: int = 2):
+def getMsgRFQ(
+    symbol: str, price: float, quantity: float, apikey: str, seqnum: int = 2
+) -> tuple[int, bytes]:
+    """Return a FIX request-for-quote message."""
 
     msg = sfx.FixMessage()
     now = int(time.time())
@@ -169,7 +177,8 @@ def getMsgCancel(
     apikey: str,
     seqnum: int,
     side: int = 1,
-):
+) -> tuple[int, bytes]:
+    """Return a FIX order cancel request message."""
 
     assert orderID is not None, "Error - orderId must not be empty or None"
 
@@ -196,7 +205,7 @@ def getMsgCancel(
     return now, msg.encode()
 
 
-def translateFix(key, value):
+def translateFix(key: str, value: str) -> str:
     trans = value
     if key == "35":
         if value == "0":

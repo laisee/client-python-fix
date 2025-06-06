@@ -1,4 +1,5 @@
 from unittest import TestCase
+import os
 import pytest
 
 from messages import (
@@ -9,6 +10,7 @@ from messages import (
     getMsgNewOrder,
     getMsgRFQ,
 )
+from utils import generateJWT
 
 APIKEY = "DUMMMY"
 MSG_LOGON = b"8=FIX.4.2|9=112|35=A|34=1|49=CLIENT|52=20240729-14:35:00.000|56=SERVER|98=0|108=30|10=072|"
@@ -33,7 +35,7 @@ class BasicMsgTest(TestCase):
 
     def test_getMsgLOGON(self):
         assert getMsgLogon is not None
-        with pytest.raises(ValueError, match="Error"):
+        with pytest.raises(ValueError, match="API_SECRET"):
             msg = getMsgLogon(APIKEY)
             assert msg is not None
 
@@ -44,6 +46,14 @@ class BasicMsgTest(TestCase):
         )
         assert msg is not None
         assert len(msg) > 0
+        msg_str = msg[1].decode("utf-8") if isinstance(msg, tuple) else msg.decode("utf-8")
+        assert "35=D" in msg_str
+
+    def test_generateJWT_requires_env(self):
+        os.environ.pop("API_SECRET", None)
+        os.environ.pop("API_URI", None)
+        with pytest.raises(ValueError):
+            generateJWT(APIKEY, 0)
 
     def test_getMsgRFQ(self):
         assert getMsgRFQ is not None
@@ -61,3 +71,4 @@ class BasicMsgTest(TestCase):
             seqnum=SEQNUM,
         )
         assert msg is not None
+

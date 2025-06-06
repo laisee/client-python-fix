@@ -1,0 +1,23 @@
+[project]
+name = "client-python-fix"
+version = "0.1.0"
+description = "Power.Trade FIX client example"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "Power.Trade" }
+]
+license = { file = "LICENSE" }
+
+[project.dependencies]
+python-dotenv = "1.0.1"
+PyJWT = "2.9.0"
+simplefix = "1.0.17"
+websockets = "11.0.3"
+
+[tool.pytest.ini_options]
+addopts = "-q"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"

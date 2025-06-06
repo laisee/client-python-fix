@@ -4,14 +4,31 @@ from datetime import UTC, datetime
 import jwt
 
 
-def generateJWT(apikey: str, now):
+def generateJWT(apikey: str, now: int) -> str:
+    """Generate a signed JWT token using environment configuration.
 
-    #
+    Parameters
+    ----------
+    apikey:
+        API key used as token subject.
+    now:
+        Current epoch time.
+
+    Returns
+    -------
+    str
+        Encoded JWT token string.
+    """
+
     # retrieve values from env variables
-    #
-    API_SECRET = os.getenv("API_SECRET", "DUMMY")
-    URI = os.getenv("API_URI", "DUMMY")
+    API_SECRET = os.getenv("API_SECRET")
+    URI = os.getenv("API_URI")
     DURATION = int(os.getenv("JWT_DURATION", 86400000))
+
+    if not API_SECRET:
+        raise ValueError("API_SECRET environment variable is required")
+    if not URI:
+        raise ValueError("API_URI environment variable is required")
 
     payload = {
         "client": "api",
@@ -30,7 +47,19 @@ def generateJWT(apikey: str, now):
         )
 
 
-def get_log_filename(prefix):
+def get_log_filename(prefix: str) -> str:
+    """Create a timestamped log filename.
+
+    Parameters
+    ----------
+    prefix:
+        Prefix for the log file name.
+
+    Returns
+    -------
+    str
+        Filename with UTC timestamp.
+    """
     # Get the current UTC datetime
     now_utc = datetime.utcnow()
     # Format the datetime into a string
@@ -40,7 +69,7 @@ def get_log_filename(prefix):
     return filename
 
 
-def get_attr(fix_message, key):
+def get_attr(fix_message: str, key: str) -> str | None:
     """
     Extracts the value for a given key from a FIX message.
 
@@ -51,7 +80,7 @@ def get_attr(fix_message, key):
     return get_attrs(fix_message).get(key)
 
 
-def get_attrs(fix_message):
+def get_attrs(fix_message: str) -> dict[str, str]:
     """
     Parses a FIX message with '|' as the separator into a dictionary of attributes.
 
@@ -71,7 +100,8 @@ def get_attrs(fix_message):
     return attributes
 
 
-def format_epoch_time(epoch_time):
+def format_epoch_time(epoch_time: int) -> str:
+    """Return FIX timestamp string for a given epoch time."""
     # Convert epoch time to datetime object
     dt = datetime.fromtimestamp(epoch_time, UTC)
 
