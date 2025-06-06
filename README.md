@@ -1,6 +1,7 @@
 [![Build](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/python-package.yml)
 [![Ruff](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/rufflint.yml)
 [![Security Check](https://github.com/laisee/client-python-fix/actions/workflows/security-check.yml/badge.svg)](https://github.com/laisee/client-python-fix/actions/workflows/security-check.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <a href="https://www.python.org/downloads/release/python-3110/">
   <img src="https://img.shields.io/badge/Python-3.11-blue.svg" alt="Python 3.11">
@@ -29,7 +30,8 @@ The client is capable of:
 - **FIX Message Handling:** Constructs and sends FIX messages to the server.
 - **Secure Communication:** Establishes a secure WebSocket connection to send and receive messages.
 - **Message Validation:** Validates the presence of necessary fields in messages.
-- **Environment Configuration:** Uses environment variables loaded from a .env file for configuration.
+- **Environment Configuration:** Uses environment variables loaded from a .env file for configuration and fails fast when required values are missing.
+- **Async Operation:** Uses `websockets` with `asyncio` for non-blocking communication and heartbeat handling.
 
 ## Prerequisites
 
@@ -61,7 +63,10 @@ The client is capable of:
 
 2. **Install required python libraries:**
    ```sh
-   pip install -r requirements.txt 
+   pip install -r requirements.txt
+   # or install in editable mode using pyproject
+   pip install -e .
+   ```
 
 3. **Generate API Keys**
    This is done at Power Trade UI under URL 'https://app.power.trade/api-keys'
@@ -97,3 +102,10 @@ The client is capable of:
    Review client actions as it executes logon to server, adds a new order, cancels the order while awaiting response(s).
 
    A sleep action allows time to review the new order on system via API or UI before it's cancelled. 
+
+## Development
+
+Run pre-commit locally to lint and scan before committing:
+```sh
+pre-commit run --all-files
+```
